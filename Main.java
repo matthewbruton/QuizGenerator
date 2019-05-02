@@ -10,6 +10,8 @@
 
 package application;
 
+import java.util.ArrayList;
+import java.util.List;
 // import statements (can be ignored, but all javafx import statements)
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -91,8 +93,16 @@ public class Main extends Application implements EventHandler<ActionEvent> {
   Button homeButton; // button to be pressed when to return to home screen
 
   ImageView pic; // picture to present on the home page
-  
+
   Scene scene;
+  Scene questionEditorScene;
+  Scene quizScene;
+
+  QuestionEditor questionEditor;
+
+  QuestionDatabase questionDatabase;
+
+  List<QuestionNode> generatedQuiz;
 
   @Override
   public void start(Stage primaryStage) {
@@ -117,11 +127,15 @@ public class Main extends Application implements EventHandler<ActionEvent> {
       numberOfQuestionsHBox.setAlignment(Pos.CENTER);
       uploadFileHBox.setAlignment(Pos.CENTER);
 
+      // QuestionDatabase
+      questionDatabase = new QuestionDatabase();
+
       homePageLabel = new Label("QUIZ GENERATOR");
       homePageLabel.setFont(Font.font("Times New Roman", 32));
       addNewQuestionButton = new Button("ADD NEW QUESTION");
+
       // drop down list of topics
-      topics = FXCollections.observableArrayList("Math", "Science", "English");
+      topics = FXCollections.observableArrayList(questionDatabase.getTopics());
       topicBox = new ComboBox<String>(topics);
       topicBox.setPromptText("SELECT A TOPIC");
       numberOfQuestionsLabel = new Label("Number of Questions: ");
@@ -152,8 +166,43 @@ public class Main extends Application implements EventHandler<ActionEvent> {
       pic.setFitHeight(70);
       pic.setPreserveRatio(true);
 
+      // Set up questionEditor Page
+      questionEditor = new QuestionEditor();
+      questionEditorScene = new Scene(questionEditor.getForm(), 400, 500); // scene dimensions
+      questionEditorScene.getStylesheets()
+          .add(getClass().getResource("application.css").toExternalForm());
+      questionEditor.getHomeButton().setOnAction(e -> primaryStage.setScene(scene));
+      questionEditor.getSaveButton().setOnAction(e -> {
+        Choice aChoice = new Choice(questionEditor.getA(), questionEditor.aIsCorrect());
+        Choice bChoice = new Choice(questionEditor.getB(), questionEditor.bIsCorrect());
+        Choice cChoice = new Choice(questionEditor.getC(), questionEditor.cIsCorrect());
+        Choice dChoice = new Choice(questionEditor.getD(), questionEditor.dIsCorrect());
+        List<Choice> choices = new ArrayList<Choice>();
+        choices.add(aChoice);
+        choices.add(bChoice);
+        choices.add(cChoice);
+        choices.add(dChoice);
+        Question newQuestion = new Question(questionEditor.getQuestion(), questionEditor.getTopic(),
+            questionEditor.getImagePath(), choices);
+        questionDatabase.addQuestion(newQuestion);
+        topics = FXCollections.observableArrayList(questionDatabase.getTopics());
+        topicBox = new ComboBox<String>(topics);
+
+        // Update stuff to homePage
+        homePage.getChildren().clear();
+        homePage.getChildren().addAll(homePageLabel, addNewQuestionButton, topicBox,
+            numberOfQuestionsLabel, numberOfQuestionsHBox, uploadFileHBox, generateQuizButton, pic);
+      });
+
+      // Set up a generated quiz page
+      // quizScene = new Scene(questionNode.getNode(), 400, 500); // scene dimensions
+      // quizScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+      // generatedQuiz = new ArrayList<QuestionNode>();
+      // TODO this stuff
+      // questionEditor.getHomeButton().setOnAction(e -> primaryStage.setScene(quizScene));
+
       // Add events to buttons
-      addNewQuestionButton.setOnAction(this);
+      addNewQuestionButton.setOnAction(e -> primaryStage.setScene(questionEditorScene));
       decreaseNumberOfQuestionsButton.setOnAction(this);
       increaseNumberOfQuestionsButton.setOnAction(this);
 
@@ -186,10 +235,14 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
   @Override
   public void handle(ActionEvent event) {
-    if (event.getSource() == addNewQuestionButton) {
-      System.out.println("addNewQ");
-      // scene.setRoot(homePage);
-    }
+    // if (event.getSource() == addNewQuestionButton) {
+    // System.out.println("addNewQ");
+    //
+    // questionEditor = new QuestionEditor();
+    // questionEditorScene = new Scene(questionEditor.getForm(), 400, 450); // scene dimensions
+    // scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+    //
+    // }
 
     // Decrement the number of questions by one and update the text field showing this count
     if (event.getSource() == decreaseNumberOfQuestionsButton) {
@@ -204,6 +257,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
       numberOfQuestions++;
       numberOfQuestionsField.setText("" + numberOfQuestions);
     }
-    
+
   }
+
 }

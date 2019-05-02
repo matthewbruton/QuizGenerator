@@ -1,21 +1,27 @@
 package application;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javafx.collections.ObservableList;
 
 public class QuestionDatabase implements QuestionDatabaseADT {
 
   List<Question> questions;
-  ObservableList<String> topics;
+  List<String> topics;
+  FileReader fileReader;
+  FileWriter fileWriter;
 
   /**
    * Default constructor
    */
   public QuestionDatabase() {
     questions = new ArrayList<Question>();
-    // topics = new FXCollections.observableArrayList();
+     topics = new ArrayList<String>();
   }
 
   @Override
@@ -29,8 +35,13 @@ public class QuestionDatabase implements QuestionDatabaseADT {
   }
 
   @Override
-  public void saveQuestionsToJSON(File jsonFile) {
-    // TODO Auto-generated method stub
+  public void saveQuestionsToJSON(String jsonFilePath) {
+
+    try {
+      fileWriter = new FileWriter(jsonFilePath);
+    } catch (IOException e) {
+      // e.printStackTrace();
+    }
 
   }
 
@@ -40,13 +51,19 @@ public class QuestionDatabase implements QuestionDatabaseADT {
   }
 
   @Override
-  public void loadQuestionsFromJSON(File jsonFile) {
+  public void loadQuestionsFromJSON(String jsonFilePath) {
     // TODO Auto-generated method stub
+
+    for (Question q : questions) {
+      if (!topics.contains(q.getTopic()))
+        topics.add(q.getTopic());
+    }
 
   }
 
   @Override
-  public ObservableList<String> getTopics() {
+  public List<String> getTopics() {
+    Collections.sort(topics);
     return topics;
   }
 

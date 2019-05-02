@@ -8,12 +8,12 @@ public interface QuestionDatabaseADT {
 
   public void addQuestion(Question question);
 
-  public void saveQuestionsToJSON(File jsonFile);
+  public void saveQuestionsToJSON(String jsonFilePath);
 
   public List<Question> getQuestions(String topic);
 
-  public void loadQuestionsFromJSON(File jsonFile);
+  public void loadQuestionsFromJSON(String jsonFilePath);
 
-  public ObservableList<String> getTopics();
+  public List<String> getTopics();
 
 }

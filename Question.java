@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Question {
 
@@ -8,10 +9,9 @@ public class Question {
   private String question;
   private String topic;
   private String imagePath;
-  private ArrayList<Choice> choices;
+  private List<Choice> choices;
 
-  public Question(String question, String topic, String imagePath,
-      ArrayList<Choice> choices) {
+  public Question(String question, String topic, String imagePath, List<Choice> choices) {
     this.question = question;
     this.topic = topic;
     this.imagePath = imagePath;
@@ -21,7 +21,7 @@ public class Question {
   public void setUsed(boolean used) {
     this.used = used;
   }
-  
+
   public boolean isUsed() {
     return used;
   }
@@ -38,7 +38,7 @@ public class Question {
     return imagePath;
   }
 
-  public ArrayList<Choice> getChoices() {
+  public List<Choice> getChoices() {
     return choices;
   }
 
