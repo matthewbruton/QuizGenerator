@@ -91,6 +91,8 @@ public class Main extends Application implements EventHandler<ActionEvent> {
   Button homeButton; // button to be pressed when to return to home screen
 
   ImageView pic; // picture to present on the home page
+  
+  Scene scene;
 
   @Override
   public void start(Stage primaryStage) {
@@ -164,7 +166,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
       homePage.getChildren().addAll(homePageLabel, addNewQuestionButton, topicBox,
           numberOfQuestionsLabel, numberOfQuestionsHBox, uploadFileHBox, generateQuizButton, pic);
 
-      Scene scene = new Scene(homePage, 400, 450); // scene dimensions
+      scene = new Scene(homePage, 400, 450); // scene dimensions
       scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
       scene.setRoot(homePage);
@@ -186,6 +188,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
   public void handle(ActionEvent event) {
     if (event.getSource() == addNewQuestionButton) {
       System.out.println("addNewQ");
+      // scene.setRoot(homePage);
     }
 
     // Decrement the number of questions by one and update the text field showing this count
@@ -201,6 +204,6 @@ public class Main extends Application implements EventHandler<ActionEvent> {
       numberOfQuestions++;
       numberOfQuestionsField.setText("" + numberOfQuestions);
     }
-
+    
   }
 }
