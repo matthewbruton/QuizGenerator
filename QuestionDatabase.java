@@ -11,8 +11,8 @@ import javafx.collections.ObservableList;
 
 public class QuestionDatabase implements QuestionDatabaseADT {
 
-  List<Question> questions;
-  List<String> topics;
+  ArrayList<Question> questions;
+  ArrayList<String> topics;
   FileReader fileReader;
   FileWriter fileWriter;
 
@@ -21,7 +21,8 @@ public class QuestionDatabase implements QuestionDatabaseADT {
    */
   public QuestionDatabase() {
     questions = new ArrayList<Question>();
-     topics = new ArrayList<String>();
+    topics = new ArrayList<String>();
+    topics.add("ALL");
   }
 
   @Override
@@ -46,8 +47,14 @@ public class QuestionDatabase implements QuestionDatabaseADT {
   }
 
   @Override
-  public List<Question> getQuestions(String topic) {
-    return questions;
+  public ArrayList<Question> getQuestions(String topic) {
+    ArrayList<Question> relevantQuestions = questions;
+    if (!topic.equals("ALL")) { // all questions included for all
+      for (Question q : questions)
+        if (!q.getTopic().equals(topic))
+          questions.remove(q);
+    }
+    return relevantQuestions;
   }
 
   @Override
@@ -62,7 +69,7 @@ public class QuestionDatabase implements QuestionDatabaseADT {
   }
 
   @Override
-  public List<String> getTopics() {
+  public ArrayList<String> getTopics() {
     Collections.sort(topics);
     return topics;
   }

@@ -1,8 +1,7 @@
 package application;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-import javafx.collections.ObservableList;
 
 public interface QuestionDatabaseADT {
 
@@ -10,7 +9,7 @@ public interface QuestionDatabaseADT {
 
   public void saveQuestionsToJSON(String jsonFilePath);
 
-  public List<Question> getQuestions(String topic);
+  public ArrayList<Question> getQuestions(String topic);
 
   public void loadQuestionsFromJSON(String jsonFilePath);
 
